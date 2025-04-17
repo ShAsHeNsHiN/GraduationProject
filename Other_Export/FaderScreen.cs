@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class FaderScreen : MonoBehaviour
@@ -20,7 +18,7 @@ public class FaderScreen : MonoBehaviour
         }
     }
 
-    [SerializeField] private Color fadeColor;
+    [SerializeField] private Color _fadeColor;
 
     public float EffectDuration {get ; private set;} = 3f;
 
@@ -37,7 +35,7 @@ public class FaderScreen : MonoBehaviour
 
     private void Start()
     {
-        OnFadeEnd += RecoverToOriginalColor;
+        OnFadeEnd += Handle_RecoverToOriginalColor;
 
         FadeOut();
     }
@@ -67,9 +65,9 @@ public class FaderScreen : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            fadeColor.a = Mathf.Lerp(alphaIn , alphaOut , timer / EffectDuration);
+            _fadeColor.a = Mathf.Lerp(alphaIn , alphaOut , timer / EffectDuration);
 
-            _meshRenderer.sharedMaterial.color = fadeColor;
+            _meshRenderer.sharedMaterial.color = _fadeColor;
 
             yield return null;
         }
@@ -77,9 +75,9 @@ public class FaderScreen : MonoBehaviour
         OnFadeEnd?.Invoke();
     }
 
-    private void RecoverToOriginalColor()
+    private void Handle_RecoverToOriginalColor()
     {
-        _meshRenderer.sharedMaterial.color = fadeColor;
+        _meshRenderer.sharedMaterial.color = _fadeColor;
     }
 
     private void OnDestroy()
